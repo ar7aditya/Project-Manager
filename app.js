@@ -7,8 +7,8 @@ const port = 80;
 const dotenv = require('dotenv');
 dotenv.config();
 
-const {initializeApp} = require("firebase/app");
-const {getAnalytics} = require("firebase/analytics");
+const {initializeApp } = require("firebase/app");
+const {getAnalytics } = require("firebase/analytics");
 
 
 const firebaseConfig = {
@@ -26,37 +26,67 @@ const firebaseapp = initializeApp(firebaseConfig);
 // mongoose.connect('mongodb://localhost:27017/rana', {useNewUrlParser: true, useUnifiedTopology: true});
 const app = express();
 app.engine('handlebars', exphbs(
-        {
-          extname: "handlebars",
-          //defaultLayout: "main-layout",
-          layoutsDir: "views/"
-      }
-      ));
-      app.set('view engine', 'handlebars');
-      
-      // Static folder
-      app.use(express.static('public'))
+  {
+    extname: "handlebars",
+    //defaultLayout: "main-layout",
+    layoutsDir: "views/"
+  }
+));
+app.set('view engine', 'handlebars');
+
+// Static folder
+app.use(express.static('public'))
 //       app.use('/public', express.static(path.join(__dirname, 'public')));
-      
-      // Body Parser Middleware
-      app.use(bodyParser.urlencoded({ extended: false }));
-      app.use(bodyParser.json());
 
-   
- 
-app.get('/', (req, res)=>{
-        res.sendFile(__dirname +'/login.html'); 
+// Body Parser Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+// ----------------------------------firestore----------------------------------------------------------
+var admin = require("firebase-admin");
+var serviceAccount = require("./serviceAccountKey.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+const db = admin.firestore();
+let User = db.collection("users");
+
+User.get().then((querySnapshot) => {
+  querySnapshot.forEach(document => {
+    console.log(document.data());
+  })
 })
-// app.get('/login', (req, res)=>{
-//     res.sendFile(__dirname +'/main.html'); 
-//         })
 
-        app.get('/login', (req, res) => {
-                res.render('main',{layout: false}); 
-              });
-              
-              app.post('/send', (req, res) => {
-                const output = `
+const batch = db.batch();
+// const user3 = db.collection("users").doc("3");
+// batch.set(user3 ,{id : 3,name: " user3"});
+// batch.commit().then(res =>{
+// console.log("Batch ran successfully");
+// });  
+
+// app.post('/send', (req, res) => {
+//    const user3 = db.collection("users").doc("3");
+//   const User = new user({
+//       name: req.body.name,
+//       company: req.body.company,
+//   });
+// batch.set(user3 ,{name :req.body.name , company :req.body.company});
+// batch.commit().then(res =>{
+// console.log("Batch ran successfully");
+// });
+//   post.save();
+//   res.redirect("/");
+// });
+// -----------------------------------------------------------------------------------------------------
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/login.html');
+})
+
+app.get('/login', (req, res) => {
+  res.render('main', { layout: false });
+});
+
+app.post('/send', (req, res) => {
+  const output = `
                   <p>You have a new contact request</p>
                   <h3>Contact Details</h3>
                   <ul>  
@@ -68,42 +98,42 @@ app.get('/', (req, res)=>{
                   <h3>Message</h3>
                   <p>${req.body.message}</p>
                 `;
-              
-                // create reusable transporter object using the default SMTP transport
-                let transporter = nodemailer.createTransport({
-                  host: 'smtp.gmail.com',
-                  port: 587,
-                  secure: false, // true for 465, false for other ports
-                  auth: {
-                    user: process.env.USER_ID,
-                    pass: process.env.USER_PASSWORD
-                  },
-                  tls:{
-                    rejectUnauthorized:false
-                  }
-                });
-              
-                // setup email data with unicode symbols
-                let mailOptions = {
-                    from: '<martinarawal@gmail.com>', // sender address
-                    to: 'adityarana95488459@gmail.com',// list of receivers
-                    subject: 'New Project Request', // Subject line
-                    text: 'Hello world?', // plain text body
-                    html: output // html body
-                };
-              
-                // send mail with defined transport object
-                transporter.sendMail(mailOptions, (error, info) => {
-                    if (error) {
-                        return console.log(error);
-                    }
-                    console.log('Message sent: %s', info.messageId);   
-                    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-              
-                    res.render('main', {msg:'Email has been sent'});
-                });
-                });
-        
+
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: process.env.USER_ID,
+      pass: process.env.USER_PASSWORD
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: '<martinarawal@gmail.com>', // sender address
+    to: 'adityarana95488459@gmail.com',// list of receivers
+    subject: 'New Project Request', // Subject line
+    text: 'Hello world?', // plain text body
+    html: output // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+    res.render('main', { msg: 'Email has been sent' });
+  });
+});
+
 console.log(`The application started successfully on port ${port}`);
-app.listen(process.env.PORT || port,()=>{
+app.listen(process.env.PORT || port, () => {
 });
