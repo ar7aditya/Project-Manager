@@ -1,29 +1,21 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+require('dotenv').config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const path = require("path");
+const ejs = require("ejs");
+const _ = require('lodash');
+const session = require('express-session');
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const findOrCreate = require('mongoose-findorcreate');
+const { stringify } = require('querystring');
 const exphbs = require('express-handlebars');
-const path = require('path');
 const nodemailer = require('nodemailer');
-const port = 80;
-const dotenv = require('dotenv');
-dotenv.config();
-
-const {initializeApp } = require("firebase/app");
-const {getAnalytics } = require("firebase/analytics");
+const port = 3000;
 
 
-const firebaseConfig = {
-  apiKey: process.env.APIKEY,
-  authDomain:process.env.AUTHDOMAIN,
-  projectId: process.env.PROJECTID,
-  storageBucket: process.env.STORAGEBUCKET,
-  messagingSenderId: process.env.MESSAGINGSENDERID,
-  appId: process.env.APPID,
-  measurementId: process.env.MEASUREMENTID
-};
-// Initialize Firebase
-const firebaseapp = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-// mongoose.connect('mongodb://localhost:27017/rana', {useNewUrlParser: true, useUnifiedTopology: true});
 const app = express();
 app.engine('handlebars', exphbs(
   {
@@ -33,57 +25,198 @@ app.engine('handlebars', exphbs(
   }
 ));
 app.set('view engine', 'handlebars');
-
-// Static folder
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'))
-//       app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Body Parser Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-// ----------------------------------firestore----------------------------------------------------------
-// var admin = require("firebase-admin");
-// var serviceAccount = require("./serviceAccountKey.json");
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
-// const db = admin.firestore();
-// let User = db.collection("users");
+app.use(session({
+  secret: "Our little secret.",
+  resave: false,
+  saveUninitialized: false
+}));
 
-// User.get().then((querySnapshot) => {
-//   querySnapshot.forEach(document => {
-//     console.log(document.data());
-//   })
-// })
+app.use(passport.initialize());
+app.use(passport.session());
 
-// const batch = db.batch();
-// const user3 = db.collection("users").doc("3");
-// batch.set(user3 ,{id : 3,name: " user3"});
-// batch.commit().then(res =>{
-// console.log("Batch ran successfully");
-// });  
+// mongoose.connect("mongodb://localhost:27017/blogDBpost", { useNewUrlParser: true });
+// mongoose.set("useCreateIndex", true);
+mongoose.connect(process.env.MONGOOSE_CLUSTER, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// app.post('/send', (req, res) => {
-//    const user3 = db.collection("users").doc("3");
-//   const User = new user({
-//       name: req.body.name,
-//       company: req.body.company,
-//   });
-// batch.set(user3 ,{name :req.body.name , company :req.body.company});
-// batch.commit().then(res =>{
-// console.log("Batch ran successfully");
-// });
-//   post.save();
-//   res.redirect("/");
-// });
-// -----------------------------------------------------------------------------------------------------
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/login.html');
-})
+// sign in schema ---------------------------------------------------------------------------------
 
-app.get('/main', (req, res) => {
-  res.render('main', { layout: false });
+const userSchema = new mongoose.Schema({
+  email: String,
+  password: String,
+  googleId: String,
+  name: String,
+  photo: String,
+  secret: String
 });
+
+userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
+
+const User = new mongoose.model("User", userSchema);
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/google/secrets",
+  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+},
+  function (accessToken, refreshToken, profile, cb) {
+    // const guser = new User({
+    //   googleId:profile.id,
+    //   username: profile.name.givenName,
+    //   photo: profile.photos.value,
+     
+    // });
+  
+    // guser.save();
+    // console.log(profile);
+
+console.log( Number(profile.id));
+    User.findOrCreate({  googleId: profile.id, name: profile.displayName,username:profile.displayName, photo: profile._json.picture }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+app.get("/auth/google",
+  passport.authenticate('google', { scope: ["profile"] })
+);
+
+app.get("/auth/google/secrets",
+  passport.authenticate('google', { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect to secrets.
+    res.redirect("/secrets");
+  });
+
+app.get("/login", function (req, res) {
+  res.render("login");
+});
+
+app.get("/register", function (req, res) {
+  res.render("register");
+});
+
+app.get("/secrets", function (req, res) {
+  if (req.isAuthenticated()) {
+    User.find({ "secret": { $ne: null } }, function (err, foundUsers) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (foundUsers) {
+          res.render("main.handlebars", {
+            usersWithSecrets: foundUsers,
+            layout: false 
+          });
+        }
+      }
+    });
+  }
+  else {
+    res.redirect("/login")
+  }
+});
+
+
+app.post("/submit", function (req, res) {
+  const submittedSecret = req.body.secret;
+
+  //Once the user is authenticated and their session gets saved, their user details are saved to req.user.
+  // console.log(req.user.id);
+
+  User.findById(req.user.id, function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundUser) {
+        foundUser.secret = submittedSecret;
+        foundUser.save(function () {
+          res.redirect("/secrets");
+        });
+      }
+    }
+  });
+});
+
+app.get("/logout", function (req, res) {
+  req.logout();
+  res.redirect("/");
+});
+
+app.post("/register", function (req, res) {
+
+  User.register({ username: req.body.username }, req.body.password, function (err, user) {
+    if (err) {
+      console.log(err);
+      res.redirect("/register");
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.redirect("/secrets");
+      });
+    }
+  });
+
+});
+
+app.post("/login", function (req, res) {
+
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password
+  });
+
+  req.login(user, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.redirect("/secrets");
+      });
+    }
+  });
+
+});
+
+
+//---------------------------------------------------------------------------------------------------------
+const postSchema = {
+  title: String,
+  content: String,
+  seen:String
+};
+const trendSchema = {
+  title: String,
+  content: String,
+  seen:String
+}
+const Post = mongoose.model("Post", postSchema);
+const Trend = mongoose.model("Trend",trendSchema);
+app.get("/", (req, res) => {
+  
+  res.redirect("/login");
+ 
+  
+});
+
+
+
+
+// project manager integration-->
 
 app.get('/response', (req, res) => {
   res.render('response.handlebars', { layout: false });
@@ -137,7 +270,8 @@ app.post('/send', (req, res) => {
     res.redirect('/response');
   });
 });
-
-console.log(`The application started successfully on port ${port}`);
+// ----- end;
 app.listen(process.env.PORT || port, () => {
+  console.log(`The application started successfully on port http://localhost:${port}`);
 });
+

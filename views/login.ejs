@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogIn</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="box" id="heading">
+        <h1>
+            Project Manager
+        </h1>
+    </div>
+<form action="/login" method="POST"> 
+    <div class="box">
+            <div class="item">
+                <input type="text" placeholder="Enter your Mail" name="username">
+            </div>
+            <div class="item">
+                <input type="text" placeholder="Enter Password" name="password">
+            </div>
+                <button id="loginButton" type="submit" class="btn btn-dark" > Log In</button>
+    </div>
+</form>
+<!-- google login -->
+<div class="col-sm-4">
+  <div class="card">
+    <div class="card-body">
+      <a class="btn-google" href="/auth/google" role="button">
+       <span> <i class="fab fa-google"></i> - Sign In with Google</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+
+        
+<script src="https://kit.fontawesome.com/ae641f6c5e.js" crossorigin="anonymous"></script>  
+</body>
+</html>
