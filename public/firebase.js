@@ -29,7 +29,7 @@ loginButton.onclick = () => {
             // The signed-in user info.
             const user = result.user;
             console.log(user)
-            window.open("/login","_self")
+            window.open("/main","_self")
             // ...
         }).catch((error) => {
             // Handle Errors here.

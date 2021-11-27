@@ -81,7 +81,7 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/login.html');
 })
 
-app.get('/login', (req, res) => {
+app.get('/main', (req, res) => {
   res.render('main', { layout: false });
 });
 
