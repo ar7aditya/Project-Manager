@@ -42,21 +42,21 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // ----------------------------------firestore----------------------------------------------------------
-var admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKey.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-const db = admin.firestore();
-let User = db.collection("users");
+// var admin = require("firebase-admin");
+// var serviceAccount = require("./serviceAccountKey.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount)
+// });
+// const db = admin.firestore();
+// let User = db.collection("users");
 
-User.get().then((querySnapshot) => {
-  querySnapshot.forEach(document => {
-    console.log(document.data());
-  })
-})
+// User.get().then((querySnapshot) => {
+//   querySnapshot.forEach(document => {
+//     console.log(document.data());
+//   })
+// })
 
-const batch = db.batch();
+// const batch = db.batch();
 // const user3 = db.collection("users").doc("3");
 // batch.set(user3 ,{id : 3,name: " user3"});
 // batch.commit().then(res =>{
@@ -85,15 +85,19 @@ app.get('/login', (req, res) => {
   res.render('main', { layout: false });
 });
 
+app.get('/response', (req, res) => {
+  res.render('response.handlebars', { layout: false });
+});
+
 app.post('/send', (req, res) => {
   const output = `
                   <p>You have a new contact request</p>
                   <h3>Contact Details</h3>
                   <ul>  
                     <li>Name: ${req.body.name}</li>
-                    <li>Company: ${req.body.company}</li>
                     <li>Email: ${req.body.email}</li>
-                    <li>Phone: ${req.body.phone}</li>
+                    <li>Project: ${req.body.project}</li>
+                    <li>Coordinator: ${req.body.coordinator}</li>
                   </ul>
                   <h3>Message</h3>
                   <p>${req.body.message}</p>
@@ -130,7 +134,7 @@ app.post('/send', (req, res) => {
     console.log('Message sent: %s', info.messageId);
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
-    res.render('main', { msg: 'Email has been sent' });
+    res.redirect('/response');
   });
 });
 

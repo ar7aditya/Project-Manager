@@ -70,12 +70,31 @@
     grid-column: 1 / 3;
   }
   
-  .contact form button, .contact form input, .contact form textarea{
+  .contact form button, .contact form input,.contact form select, .contact form textarea{
     width:100%;
     padding:1em;
     border:1px solid #c9e6ff;
   }
-  
+
+  .contact div{
+    background-color: yellow;
+    padding: 20px;
+    width: 500px;
+    display: none;
+  }
+  .project-hover{
+    background-color: yellow;
+    width:100%;
+    padding:1em;
+    border:1px solid #c9e6ff;
+  }
+  option:hover +div{
+    display: block;
+}
+.contact option:hover{
+  color: yellow;
+}
+
   .contact form button{
     background:#c9e6ff;
     border:0;

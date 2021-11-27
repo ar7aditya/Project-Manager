@@ -1,126 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>mm</title>
- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mm</title>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
 
-<link rel="stylesheet" href="css/indexstyle.css">
-<script type="module">
-var subjectObject = {
-  "CSE": {
-    "john": ["Railway Management"],
-    "Ali": ["Student Database"],
-    "Keith": ["Phd Coordination"]    
-  },
-  "IT": {
-    "Anurag": ["Hotel Management"],
-    "Nirmal": ["E-Commerce"],
-    "Anjana": ["Food Ordering"]
-  },
-  "DSE": {
-    "Pankaj": ["Room Booking"],
-    "Anil": ["Library Management"]
-  }
-}
-window.onload = function() {
-  var subjectSel = document.getElementById("branch");
-  var topicSel = document.getElementById("Coordinator");
-  var chapterSel = document.getElementById("topics");
+  <link rel="stylesheet" href="css/indexstyle.css">
+  <script type="module">
 
-  for (var x in subjectObject) {
-    subjectSel.options[subjectSel.options.length] = new Option(x, x);
-  }
-  subjectSel.onchange = function() {
-    //empty Chapters- and Topics- dropdowns
-    chapterSel.length = 1;
-    topicSel.length = 1;
-    //display correct values
-    for (var y in subjectObject[this.value]) {
-      topicSel.options[topicSel.options.length] = new Option(y, y);
-    }
-  }
-  topicSel.onchange = function() {
-    //empty Chapters dropdown
-    chapterSel.length = 0;
-    //display correct values
-    var z = subjectObject[subjectSel.value][this.value];
-    for (var i = 0; i < z.length; i++) {
-      chapterSel.options[chapterSel.options.length] = new Option(z[i], z[i]);
-    }
-  }
-}
-</script>
-</head>   
+
+
+  </script>
+</head>
+
 <body>
-  
-  <!-------------------------------------drop down menu------------------------------- -->
-<h1>Choose a project</h1>
 
-<form name="form1" id="form1" action="/" method="post">
-Branch:
- <select name="branch" id="branch">
- <option value="" selected="selected">Please select your branch</option>
-</select>
-  <br><br>
-  Coordinators:
- <select name="Coordinator" id="Coordinator">
-        <option value="" selected="selected">Select Coordinator</option>
-  </select>
-  <br><br>
-Topics:
- <select name="topics" id="topics">
-    <option value="" selected="selected"></option>
-  </select>
-  <br><br>
-  <input type="submit" value="Submit">  
-</form>
 
-{{!-- <!-- ---------------------------------------contact form------------------------------- --> --}}
-<div class="container">
-  <h1 class="brand"><span>Choose </span>a Project</h1>
-  <div class="wrapper animated bounceInLeft">
-    <div class="company-info">
-      <h3>Project Manager</h3>
-      <ul>
-        <li style="font-size: larger;"> @Team WEBPRO</li>
-        <li><i class="fa fa-road"></i> Aditya Rana</li>
-        <li><i class="fa fa-phone"></i> Kressha Kothari</li>
-        <li><i class="fa fa-envelope"></i> Parthraj Solanki</li>
-      </ul>
-    </div>
-    <div class="contact">
-      <h3>Email Us</h3>
-      {{msg}}
-      <form method="POST" action="send">
-        <p>
-          <label>Name</label>
-          <input type="text" name="name">
-        </p>
-        <p>
-          <label>Company</label>
-          <input type="text" name="company">
-        </p>
-        <p>
-          <label>Email Address</label>
-          <input type="email" name="email">
-        </p>
-        <p>
-          <label>Phone Number</label>
-          <input type="text" name="phone">
-        </p>
-        <p class="full">
-          <label>Message</label>
-          <textarea name="message" rows="5"></textarea>
-        </p>
-        <p class="full">
-          <button type="submit">Submit</button>
-        </p>
-      </form>
+  {{!--
+  <!-- ---------------------------------------contact form------------------------------- --> --}}
+  <div class="container">
+    <h1 class="brand"><span>Choose </span>a Project</h1>
+    <div class="wrapper animated bounceInLeft">
+      <div class="company-info">
+        <h3>Project Manager</h3>
+        <ul>
+          <li style="font-size: larger;"> @Team WEBPRO</li>
+          <li><i class="fa fa-road"></i> Aditya Rana</li>
+          <li><i class="fa fa-phone"></i> Pradyumna Singh</li>
+          <li><i class="fa fa-envelope"></i> Tanmay Patel</li>
+        </ul>
+      </div>
+      <div class="contact">
+        <h3>Email Us</h3>
+        <form method="POST" action="send">
+          <p>
+            <label>Name</label>
+            <input type="text" name="name">
+          </p>
+          <p>
+            <label>College Email Address</label>
+            <input type="email" name="email">
+          </p>
+          <p>
+            <label>Projects</label>
+            {{!-- <input type="text" name="project"> --}}
+            <select type="text" name="project" class="project-input">
+              <option value="">Select Project</option>
+              <option class="project-hover" id="hov-ecom" value="E-Commerce">E-Commerce</option>
+              <option class="project-hover" id="hov-hotmg" value="Hotel Management">Hotel Management</option>
+              <option class="project-hover" id="hov-stdb" value="Student Database">Student Database</option>
+              <option class="project-hover" id="hov-rb" value="Room Booking">Room Booking</option>
+              <option class="project-hover" id="hov-fd" value="Food Delivery">Food Delivery</option>
+            </select>
+          </p>
+          <p>
+            <label>Coordinator</label>
+            <select type="text" name="coordinator" class="coordinator-input">
+              <option value="">Select Coordinator</option>
+              <option value="Anurag Bhatnagar">Anurag Bhatnagar</option>
+              <option value="Nirmal Gupta">Nirmal Gupta</option>
+              <option value="Anjana">Anjana</option>
+              <option value="Rahul Saxena">Rahul Saxena</option>
+              <option value="Pankaj Vyas">Pankaj Vyas</option>
+            </select>
+          </p>
+          <p class="full">
+            <label>Message</label>
+            <textarea name="message" rows="5"></textarea>
+          </p>
+          <p class="full">
+            <button id="submitbutton" type="submit">Submit</button>
+          </p>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-{{!-- <!-- ------------------------------------------------------------------------------------- --> --}}
+  {{!--
+  <!-- ------------------------------------------------------------------------------------- --> --}}
 </body>
+
 </html>
