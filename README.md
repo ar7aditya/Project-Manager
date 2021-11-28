@@ -1,6 +1,6 @@
-
-<img alt="Logo" src="public/img/logo.png"/>
-
+<p>
+<img alt="Logo" src="public/img/logo.png" width="300"/>
+</p>
 
 # Project Manager
 Project Manager is a solution to the problem with current system iof manual work of submitting projects 
