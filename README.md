@@ -1,5 +1,5 @@
 
-![Logo](https://github.com/prady8339@gmail.com/Project-Manager/public/img/logo.png)
+<img alt="Logo" src="public/img/logo.png" width="128"/>
 
 
 # Project Manager
