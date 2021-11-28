@@ -132,4 +132,17 @@ html {
     .btn-google:hover{
       color:tomato;
     }
-   
+   .box-student{
+    position: relative;
+
+  
+    padding: 10px;
+    top: 150px;
+
+   }
+   .box-teacher{
+    position: relative;
+padding:10px;
+top:166px;
+
+   }
