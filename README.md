@@ -1,5 +1,5 @@
 
-<img alt="Logo" src="public/img/logo.png" width="128"/>
+<img alt="Logo" src="public/img/logo.png"/>
 
 
 # Project Manager
