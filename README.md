@@ -34,7 +34,7 @@ node app.js
     
 ## Feedback
 
-If you have any feedback, please reach out to us at <a href="mailto:ranarajput9548@gmail.com">aditya</a> or <a href="mailto:singhprady8339@gmail.com">aditya</a>
+If you have any feedback, please reach out to us at <a href="mailto:ranarajput9548@gmail.com">aditya</a> or <a href="mailto:singhprady8339@gmail.com">pradyumna</a>
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
