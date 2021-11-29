@@ -1,6 +1,6 @@
-
-![Logo](https://github.com/prady8339@gmail.com/Project-Manager/public/img/logo.png)
-
+<p>
+<img alt="Logo" src="public/img/logo.png" width="300"/>
+</p>
 
 # Project Manager
 Project Manager is a solution to the problem with current system iof manual work of submitting projects 
@@ -31,11 +31,11 @@ git clone https://github.com/ar7aditya/Project-Manager.git
 npm install
 node app.js
 ```
-    
+
 ## Feedback
 
-If you have any feedback, please reach out to us at https://www.linkedin.com/in/prady8339/
- or https://www.linkedin.com/in/aditya-rana-677aa81ba/
+If you have any feedback, please reach out to us at <a href="mailto:ranarajput9548@gmail.com">aditya</a> or <a href="mailto:singhprady8339@gmail.com">pradyumna</a>
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
