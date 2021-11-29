@@ -1,5 +1,41 @@
- <h3> Upcomming plans  </h3> 
-1. This project needs upgradation and connection to database. [DONE] <br> 
-2. introduction of authentication. [TO DO] <br> 
-3. introduction to chatbox. [TO DO ] <br>
-4. introduction to public declaration and user browsing. [TO DO] <br>
+
+![Logo](https://github.com/prady8339@gmail.com/Project-Manager/public/img/logo.png)
+
+
+# Project Manager
+Project Manager is a solution to the problem with current system iof manual work of submitting projects 
+longer response from teachers and
+late submissions from students.
+
+## Problem faced by teachers
+- lack of management
+- not able to track the progess
+## Problem faced by students
+- Wastage of time
+- lack of Guidance
+- Unorganised structure
+
+## Features
+
+- Task manager
+- Guidance ecosystem
+- Progress tracker
+
+
+## Installation
+
+Install my-project with npm
+
+```bash
+git clone https://github.com/ar7aditya/Project-Manager.git
+npm install
+node app.js
+```
+    
+## Feedback
+
+If you have any feedback, please reach out to us at https://www.linkedin.com/in/prady8339/
+ or https://www.linkedin.com/in/aditya-rana-677aa81ba/
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
