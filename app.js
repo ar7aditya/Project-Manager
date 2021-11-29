@@ -224,6 +224,9 @@ res.render("home");
 app.get('/response', (req, res) => {
   res.render('response.handlebars', { layout: false });
 });
+app.get('/approveres', (req, res) => {
+  res.render('approveres.handlebars', { layout: false });
+});
 
 app.post('/send', (req, res) => {
   const output = `
@@ -237,6 +240,7 @@ app.post('/send', (req, res) => {
                   </ul>
                   <h3>Message</h3>
                   <p>${req.body.message}</p>
+                  <button><a href="http://localhost:3000/approveres">Approve</a></button>
                 `;
 
   // create reusable transporter object using the default SMTP transport
