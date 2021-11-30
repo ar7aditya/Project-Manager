@@ -35,7 +35,9 @@ node app.js
 ## Feedback
 
 If you have any feedback, please reach out to us at
-pradyumna singh : https://www.linkedin.com/in/prady8339/
+
+pradyumna singh : https://www.linkedin.com/in/prady8339/ 
+
 Aditya Rana : https://www.linkedin.com/in/adityarana777/
 
 
