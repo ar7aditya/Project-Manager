@@ -13,7 +13,7 @@ const findOrCreate = require('mongoose-findorcreate');
 const { stringify } = require('querystring');
 const exphbs = require('express-handlebars');
 const nodemailer = require('nodemailer');
-const port = 8080;
+const port = 3000;
 
 
 const app = express();
@@ -50,8 +50,7 @@ const userSchema = new mongoose.Schema({
   googleId: String,
   name: String,
   photo: String,
-  secret: String,
-  approved:Boolean
+  secret: String
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -167,7 +166,6 @@ app.post("/register", function (req, res) {
       res.redirect("/register");
     } else {
       passport.authenticate("local")(req, res, function () {
-       
         res.redirect("/secrets");
       });
     }
@@ -208,10 +206,9 @@ const trendSchema = {
 }
 const Post = mongoose.model("Post", postSchema);
 const Trend = mongoose.model("Trend",trendSchema);
-
 app.get("/", (req, res) => {
   
-res.render("home");
+  res.render("home");
  
   
 });
@@ -260,7 +257,7 @@ app.post('/send', (req, res) => {
   // setup email data with unicode symbols
   let mailOptions = {
     from: '<martinarawal@gmail.com>', // sender address
-    to: 'singhprady8339@gmail.com',// list of receivers
+    to: 'adityarana95488459@gmail.com',// list of receivers
     subject: 'New Project Request', // Subject line
     text: 'Hello world?', // plain text body
     html: output // html body

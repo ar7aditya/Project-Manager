@@ -108,6 +108,7 @@ html {
     text-align: center;
     width: 80vh;
     font-size: 19px;
+    border:none;
     }
     
     span.label {
