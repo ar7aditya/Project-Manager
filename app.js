@@ -50,8 +50,7 @@ const userSchema = new mongoose.Schema({
   googleId: String,
   name: String,
   photo: String,
-  secret: String,
-  approved:Boolean
+  secret: String
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -167,7 +166,6 @@ app.post("/register", function (req, res) {
       res.redirect("/register");
     } else {
       passport.authenticate("local")(req, res, function () {
-       
         res.redirect("/secrets");
       });
     }
@@ -208,10 +206,9 @@ const trendSchema = {
 }
 const Post = mongoose.model("Post", postSchema);
 const Trend = mongoose.model("Trend",trendSchema);
-
 app.get("/", (req, res) => {
   
-res.render("home");
+  res.render("home");
  
   
 });

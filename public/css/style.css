@@ -102,6 +102,15 @@ html {
     #customBtn:hover {
       cursor: pointer;
     }
+    #logpass{
+    height: 7vh;
+    padding: 5px;
+    text-align: center;
+    width: 80vh;
+    font-size: 19px;
+    border:none;
+    }
+    
     span.label {
       font-family: serif;
       font-weight: normal;
